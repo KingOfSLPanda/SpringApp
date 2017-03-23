@@ -1,5 +1,6 @@
 package net.proselyte.springsecurityapp.service;
 
+import com.sun.net.httpserver.Authenticator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,17 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public void autoLogin(String username, String password) {
+        System.out.println("-Success-");
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        System.out.println(userDetails);
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-
+        System.out.println(password);
+        System.out.println(userDetails.getAuthorities());
         authenticationManager.authenticate(authenticationToken);
 
         if (authenticationToken.isAuthenticated()) {
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+          SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
             logger.debug(String.format("Successfully %s auto logged in", username));
         }
