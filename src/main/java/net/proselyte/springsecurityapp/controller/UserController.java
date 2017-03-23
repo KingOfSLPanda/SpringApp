@@ -10,6 +10,7 @@ import net.proselyte.springsecurityapp.service.UserServiceImpl;
 import net.proselyte.springsecurityapp.validator.UserValidator;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,9 @@ public class UserController {
 
     @Autowired
     public JsonService jsonService ;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -88,19 +92,18 @@ public class UserController {
     public String fk1(String access_token){
         JSONObject jSONObject =  jsonService.readJsonFromUrl("https://graph.facebook.com/me?access_token="+access_token);
         User socialUser=new User();
-        System.out.println(jSONObject);
-        socialUser.setUsername(jSONObject.getString("id"));
-        socialUser.setPassword(access_token);
-        if(userService.findByUsername(socialUser.getUsername()).size()==0) {
+        if(userService.findByUsername(jSONObject.getString("id")).size()==0) {
+            socialUser.setUsername(jSONObject.getString("id"));
+            socialUser.setPassword(access_token);
             userService.save(socialUser);
         }
         else{
             User user=userService.findByUsername(socialUser.getUsername()).get(0);
-            user.setPassword(access_token);
+            user.setPassword(bCryptPasswordEncoder.encode(access_token));
             userDao.save(user);
         }
 
-        securityService.autoLogin(socialUser.getUsername(), access_token);
+        securityService.autoLogin(jSONObject.getString("id"), access_token);
         return "redirect:/welcome";
     }
 
