@@ -34,6 +34,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private UserDao userDao;
+
+    @Autowired
     private SecurityService securityService;
 
     @Autowired
@@ -72,17 +75,33 @@ public class UserController {
 
     @RequestMapping(value ="/facebook", method = RequestMethod.GET)
     public String facebook(){
-        //return "redirect:https://www.facebook.com/v2.8/dialog/oauth?client_id=628809023972734&response_type=token&redirect_uri=http://localhost:8087/oops";
+        return "redirect:https://www.facebook.com/v2.8/dialog/oauth?client_id=628809023972734&response_type=token&redirect_uri=http://localhost:8087/fk";
+        //return "oops";
+    }
+
+    @RequestMapping(value ="/fk", method = RequestMethod.GET)
+    public String fk(){
         return "oops";
     }
+
     @RequestMapping(value ="/fk1", method = RequestMethod.GET)
-    public String fk(String access_token){
-        JSONObject jSONObject =  jsonService.readJsonFromUrl("https://graph.facebook.com/me?fields=id&access_token="+access_token);
+    public String fk1(String access_token){
+        JSONObject jSONObject =  jsonService.readJsonFromUrl("https://graph.facebook.com/me?access_token="+access_token);
         User socialUser=new User();
         System.out.println(jSONObject);
-        socialUser.setUsername(String.valueOf(jSONObject.getLong("user_id")));
-        System.out.println(socialUser.getUsername());
-        return "redirect:/oop";
+        socialUser.setUsername(jSONObject.getString("id"));
+        socialUser.setPassword(access_token);
+        if(userService.findByUsername(socialUser.getUsername()).size()==0) {
+            userService.save(socialUser);
+        }
+        else{
+            User user=userService.findByUsername(socialUser.getUsername()).get(0);
+            user.setPassword(access_token);
+            userDao.save(user);
+        }
+
+        securityService.autoLogin(socialUser.getUsername(), access_token);
+        return "redirect:/welcome";
     }
 
     @RequestMapping(value = "/example", method = RequestMethod.GET)
@@ -94,7 +113,6 @@ public class UserController {
         String pas = socialUser.getPassword();
 //        JSONObject jsonS=jsonService.readJsonFromUrl("https://api.vk.com/method/users.get?user_ids="+jSONObject.getLong("user_id"));
 //        System.out.println(jsonS);
-        System.out.println(userService.findByUsername(socialUser.getUsername()));
         if(userService.findByUsername(socialUser.getUsername()).size()==0) {
             userService.save(socialUser);
         }
