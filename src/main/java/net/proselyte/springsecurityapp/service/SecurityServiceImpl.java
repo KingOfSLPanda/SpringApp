@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * Implementation of {@link SecurityService} interface.
- *
- * @author Eugene Suleimanov
- * @version 1.0
  */
 
 @Service
@@ -29,6 +26,9 @@ public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
@@ -41,19 +41,21 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public void autoLogin(String username, String password) {
-        System.out.println("-Success-");
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        System.out.println(userDetails);
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-        System.out.println(password);
-        System.out.println(userDetails.getAuthorities());
-        authenticationManager.authenticate(authenticationToken);
+        if (userService.findByUsername(username).get(0).getEnabled()) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+            authenticationManager.authenticate(authenticationToken);
+            if (authenticationToken.isAuthenticated()) {
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-        if (authenticationToken.isAuthenticated()) {
-          SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-            logger.debug(String.format("Successfully %s auto logged in", username));
+                logger.debug(String.format("Successfully %s auto logged in", username));
+            }
         }
+    }
+
+    @Override
+    public void clearAuth() {
+        authenticationManager.authenticate(null);
     }
 }

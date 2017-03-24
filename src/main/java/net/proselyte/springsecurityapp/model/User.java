@@ -5,9 +5,6 @@ import java.util.Set;
 
 /**
  * Simple JavaBean domain object that represents a User.
- *
- * @author Eugene Suleimanov
- * @version 1.0
  */
 
 @Entity
@@ -24,6 +21,28 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name="name")
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @Column(name="enabled")
+    private Boolean enabled;
+
     @Transient
     private String confirmPassword;
 
@@ -31,7 +50,6 @@ public class User {
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-
     public Long getId() {
         return id;
     }

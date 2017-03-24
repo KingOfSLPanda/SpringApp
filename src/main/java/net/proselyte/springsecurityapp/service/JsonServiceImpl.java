@@ -3,14 +3,11 @@ package net.proselyte.springsecurityapp.service;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
-
-/**
- * Created by Y50-70 on 19.03.2017.
- */
 
 @Service
 public class JsonServiceImpl implements JsonService {
@@ -38,4 +35,32 @@ public class JsonServiceImpl implements JsonService {
         }
         return sb.toString();
     }
+    public JSONObject sendPost() throws Exception {
+
+        String url = "https://api.twitter.com/oauth/request_token";
+        URL obj = new URL(url);
+        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+        //add reuqest header
+        con.setRequestMethod("POST");
+
+        String urlParameters = "oauth_callback=http://localhost:8087/tww&oauth_consumer_key=hAVdZLbbArUH3MJaRXkg4tP6k";
+
+        // Send post request
+        con.setDoOutput(true);
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.writeBytes(urlParameters);
+        wr.flush();
+        wr.close();
+
+        int responseCode = con.getResponseCode();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine = readAll(in);
+        in.close();
+        JSONObject json = new JSONObject(inputLine);
+        return json;
+    }
 }
+
+

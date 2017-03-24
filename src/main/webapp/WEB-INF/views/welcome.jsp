@@ -5,16 +5,18 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<link>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
 
-    <title>Welcome</title>
-
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+<title>Welcome</title>
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body>
 
@@ -25,13 +27,61 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
 
-        <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a>
+        <h2>Welcome ${name} |
+            <button><a onclick="document.forms['logoutForm'].submit()">Logout</a></button>
         </h2>
+        <h3>USERS:</h3>
+        <%--<span class="glyphicon glyphicon-remove">- </span>--%>
+        <c:forEach items="${users}" var="item">
+            <c:if test="${item.enabled==true}">
+                <h3>
+                    <button><span id="${item.username}" class="glyphicon glyphicon-remove"
+                                  onclick='changeStatusUser("${item.username}","${currentUsername}")'></span></button><span id="${item.username}" class="test">(unlocked)</span>
+                        ${item.name}<br>
+                </h3>
+            </c:if>
+            <c:if test="${item.enabled==false}">
+                <h3>
+                    <button><span id="${item.username}" class="glyphicon glyphicon-ok"
+                                  onclick='changeStatusUser("${item.username}","${currentUsername}")'></span></button><span id="${item.username}" class="test">(locked)</span>
+                        ${item.name}<br>
+                </h3>
+            </c:if>
+        </c:forEach>
 
     </c:if>
 
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    function changeStatusUser(username, currentUsername) {
+        $.ajax({
+            url: '/block',
+            type: 'POST',
+            data: ({
+                "username": username,
+                "currentUsername": currentUsername
+            }),
+            success: function (redirect) {
+//                alert(redirect)
+                if (redirect=="REDIRECT") window.location="${contextPath}/logout"
+                if ($("#" + username).attr("class") == "glyphicon glyphicon-ok")
+                {
+                    $("#" + username).attr("class", "glyphicon glyphicon-remove");
+                    $("#"+username+".test").text("(unlocked)");
+                }
+                else
+                {
+                    $("#" + username).attr("class", "glyphicon glyphicon-ok");
+                    $("#"+username+".test").text("(locked)");
+                }
+
+            }
+        });
+    }
+</script>
 </body>
 </html>
+

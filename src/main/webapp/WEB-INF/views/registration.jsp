@@ -53,6 +53,14 @@
             </div>
         </spring:bind>
 
+        <spring:bind path="name">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="name" class="form-control" placeholder="name"
+                            autofocus="true"></form:input>
+                <form:errors path="name"></form:errors>
+            </div>
+        </spring:bind>
+
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
     </form:form>
 

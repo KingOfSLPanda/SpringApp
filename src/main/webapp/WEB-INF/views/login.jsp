@@ -31,7 +31,7 @@
 
 <div class="container">
 
-    <form method="POST" action="${contextPath}/login" class="form-signin">
+    <form method="POST" action="${contextPath}/login3" class="form-signin">
         <h2 class="form-heading">Log in</h2>
 
         <div class="form-group ${error != null ? 'has-error' : ''}">
@@ -44,16 +44,16 @@
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
 
-                <a class='btn btn-vk btn-primary disabled'><i class="fa fa-vk"></i></a>
-                <a class='btn btn-primary' href="${contextPath}/vk"> Sign in with VK</a>
-            <br/>
+            <span onclick="goToVK()" class="fa fa-vk fa-3x"></span>
+            <%--<a class='btn btn-primary' > Sign in with VK</a>--%>
+            <%--<br/>--%>
 
-                <a class='btn btn-twitter btn-success disabled'><i class="fa fa-twitter"></i></a>
-                <a class='btn btn-success' href="${contextPath}/twitter"> Sign in with Twitter</a>
-            <br/>
+           <span onclick="goToTW()" class="fa fa-twitter fa-3x"></span>
+            <%--<a class='btn btn-success' href="${contextPath}/twitter"> Sign in with Twitter</a>--%>
+            <%--<br/>--%>
 
-                <a class='btn btn-facebook btn-info disabled'><i class="fa fa-facebook"></i></a>
-                <a class='btn btn-info' href="${contextPath}/facebook">Sign in with facebook</a>
+           <span onclick="goToFK()" class="fa fa-facebook fa-3x"></span>
+            <%--<a class='btn btn-info' href="${contextPath}/facebook">Sign in with facebook</a>--%>
 
             <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
         </div>
@@ -64,5 +64,22 @@
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function goToVK() {
+        window.location = "/vk"
+    }
+</script>
+
+<script type="text/javascript">
+    function goToTW() {
+        window.location = "/twitter"
+    }
+</script>
+
+<script type="text/javascript">
+    function goToFK() {
+        window.location = "/facebook"
+    }
+</script>
 </body>
 </html>
