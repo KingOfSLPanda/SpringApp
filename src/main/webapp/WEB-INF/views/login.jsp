@@ -44,15 +44,15 @@
 
             <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
 
-            <span onclick="goToVK()" class="fa fa-vk fa-3x"></span>
+            <span onclick="goToVK()" class="fa fa-vk fa-3x" style="color: cornflowerblue"></span>
             <%--<a class='btn btn-primary' > Sign in with VK</a>--%>
             <%--<br/>--%>
 
-           <span onclick="goToTW()" class="fa fa-twitter fa-3x"></span>
+           <span onclick="goToTW()" class="fa fa-twitter fa-3x" style="color: #5bc0de"></span>
             <%--<a class='btn btn-success' href="${contextPath}/twitter"> Sign in with Twitter</a>--%>
             <%--<br/>--%>
 
-           <span onclick="goToFK()" class="fa fa-facebook fa-3x"></span>
+           <span onclick="goToFK()" class="fa fa-facebook fa-3x" style="color: #337ab7"></span>
             <%--<a class='btn btn-info' href="${contextPath}/facebook">Sign in with facebook</a>--%>
 
             <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>

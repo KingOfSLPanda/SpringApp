@@ -30,20 +30,20 @@
         <h2>Welcome ${name} |
             <button><a onclick="document.forms['logoutForm'].submit()">Logout</a></button>
         </h2>
-        <h3>USERS:</h3>
+        <h3>Black list:</h3>
         <%--<span class="glyphicon glyphicon-remove">- </span>--%>
         <c:forEach items="${users}" var="item">
             <c:if test="${item.enabled==true}">
                 <h3>
-                    <button><span id="${item.username}" class="glyphicon glyphicon-remove"
-                                  onclick='changeStatusUser("${item.username}","${currentUsername}")'></span></button><span id="${item.username}" class="test">(unlocked)</span>
+                    <button><span id="${item.username}" class="fa fa-unlock"
+                                  onclick='changeStatusUser("${item.username}","${currentUsername}")'></span></button>
                         ${item.name}<br>
                 </h3>
             </c:if>
             <c:if test="${item.enabled==false}">
                 <h3>
-                    <button><span id="${item.username}" class="glyphicon glyphicon-ok"
-                                  onclick='changeStatusUser("${item.username}","${currentUsername}")'></span></button><span id="${item.username}" class="test">(locked)</span>
+                    <button><span id="${item.username}" class="fa fa-lock"
+                                  onclick='changeStatusUser("${item.username}","${currentUsername}")'></span></button>
                         ${item.name}<br>
                 </h3>
             </c:if>
@@ -67,15 +67,13 @@
             success: function (redirect) {
 //                alert(redirect)
                 if (redirect=="REDIRECT") window.location="${contextPath}/logout"
-                if ($("#" + username).attr("class") == "glyphicon glyphicon-ok")
+                if ($("#" + username).attr("class") == "fa fa-lock")
                 {
-                    $("#" + username).attr("class", "glyphicon glyphicon-remove");
-                    $("#"+username+".test").text("(unlocked)");
+                    $("#" + username).attr("class", "fa fa-lock");
                 }
                 else
                 {
-                    $("#" + username).attr("class", "glyphicon glyphicon-ok");
-                    $("#"+username+".test").text("(locked)");
+                    $("#" + username).attr("class", "fa fa-unlock");
                 }
 
             }
