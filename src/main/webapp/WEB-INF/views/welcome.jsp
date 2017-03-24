@@ -67,7 +67,7 @@
             success: function (redirect) {
 //                alert(redirect)
                 if (redirect=="REDIRECT") window.location="${contextPath}/logout"
-                if ($("#" + username).attr("class") == "fa fa-lock")
+                if ($("#" + username).attr("class") == "fa fa-unlock")
                 {
                     $("#" + username).attr("class", "fa fa-lock");
                 }
