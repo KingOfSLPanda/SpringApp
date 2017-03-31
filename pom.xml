@@ -109,6 +109,21 @@
       <artifactId>twitter4j-core</artifactId>
       <version>[4.0,)</version>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.cloudinary/cloudinary-taglib -->
+    <dependency>
+      <groupId>com.cloudinary</groupId>
+      <artifactId>cloudinary-taglib</artifactId>
+      <version>1.0.14</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core -->
+    <dependency>
+      <groupId>com.cloudinary</groupId>
+      <artifactId>cloudinary-core</artifactId>
+      <version>1.9.1</version>
+    </dependency>
+
   </dependencies>
   <build>
     <finalName>SpringSecurityApp</finalName>

@@ -65,7 +65,6 @@
                 "currentUsername": currentUsername
             }),
             success: function (redirect) {
-//                alert(redirect)
                 if (redirect=="REDIRECT") window.location="${contextPath}/logout"
                 if ($("#" + username).attr("class") == "fa fa-unlock")
                 {

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import twitter4j.auth.AccessToken;
 
+import java.io.IOException;
+
 import static java.awt.SystemColor.window;
 
 /**
