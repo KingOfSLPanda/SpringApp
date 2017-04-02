@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public interface CloudinaryService {
     Map saveSomething() throws IOException;
-    Map changeSize(int w, int h);
-    String sepia(Map map);
+    String changeSize(String url) throws IOException;
+    String changeGray(String url) throws IOException;
+    String changeSepia(String url) throws IOException;
 }

@@ -21,18 +21,26 @@ public class ImageController {
 
     @RequestMapping(value = "/img")
     public String img(Model model) throws IOException {
-        Map map = cloudinaryService.saveSomething();
-        model.addAttribute("imgMap", map);
+        model.addAttribute("imgURL", cloudinaryService.saveSomething().get("secure_url"));
+        return "img";
+    }
+
+    @RequestMapping(value="/imggray")
+    public String imgGray(@RequestParam String url, Model model) throws IOException {
+        model.addAttribute("imgURL", cloudinaryService.changeGray(url));
+        return "img";
+    }
+
+    @RequestMapping(value="/imgsepia")
+    public String imgSepia(@RequestParam String url, Model model) throws IOException {
+        model.addAttribute("imgURL", cloudinaryService.changeSepia(url));
         return "img";
     }
 
     @RequestMapping(value="/img+")
-    public @ResponseBody Map imgChange(@RequestParam Map imgMap){
-        System.out.println("---");
-        System.out.println(imgMap);
-        System.out.println("---");
-        Integer w=(Integer)imgMap.get("width");
-        Integer h=(Integer)imgMap.get("height");
-        return imgMap;
+    public @ResponseBody String imgChange(@RequestParam String imgURL) throws IOException {
+        System.out.println("Change");
+        imgURL=cloudinaryService.changeSize(imgURL);
+        return imgURL;
     }
 }
