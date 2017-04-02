@@ -21,19 +21,19 @@
 
         .holder{
             position:relative;
-            width:300px;
-            height:400px;
+            width:auto;
+            height:auto;
             /*align-self: center;*/
             margin: auto;
         }
         .block{
+            height: 30px;
             position:absolute;
-            align-self: center;
-            /*left:0;*/
+            left:0;
             /*bottom:0;*/
             /*right:0;*/
-            /*top:0;*/
-            background:rgba(255,255,255, 0.8);
+            top:92%;
+            background:rgba(255,255,255, 0.7);
             padding:5px;
             display:none;
         }
@@ -44,32 +44,87 @@
 </head>
 <body>
     <div class="holder">
-        <span class="imgURL"><img src="${imgURL}" id="${imgURL.get}"/></span>
+        <span class="imgURL"><img src="${image.getUrl()}" id="${image.getId()}"/>
         <div class="block">
-    <button><span class="fa-plus-square-o" onclick='changeSize("${imgURL}")'></span></button>
-    <button><span class="fa-minus-square-o" onclick='changeSize("${imgURL}")'></span></button>
+            <button><span class="glyphicon glyphicon-plus-sign" onclick='changeSize("${image.getId()}", "+")'></span></button>
+            <button><span class="glyphicon glyphicon-minus-sign" onclick='changeSize("${image.getId()}", "-")'></span></button>
+            <button><span class="glyphicon glyphicon-adjust" onclick='changeGray("${image.getId()}")'></span></button>
+            <button><span class="glyphicon glyphicon-eye-open" onclick='changeSepia("${image.getId()}")'></span></button>
+            <button><span class="glyphicon glyphicon-retweet" onclick='changeOriginal("${image.getId()}")'></span></button>
+    <%--<button><span class="fa-minus-square-o" onclick='changeSize("${image.getUrl()}")'></span></button>--%>
         </div>
+        </span>
+
     </div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 <script type="text/javascript">
-    function changeSize(imgURL) {
-        alert("OK")
+    function changeSize(id, s) {
+        imgURL=$("#"+id).attr("src");
         $.ajax({
             type: 'POST',
             url: '/img+',
             data: ({
-                "imgURL": imgURL
+                "imgURL": imgURL,
+                "s": s
             }),
-            success: function (redirect) {
-                    $("#" + "imgURL").attr("src", redirect);
-
+            success: function (url) {
+                    $("#" + id).attr("src", url);
+//                    $(".fa-plus-square-o[onclick=changeSize(\""+id+"\")]").attr("onclick", "changeSize(\""+id+"\")");
+//                    $(".fa-minus-square-o[onclick=changeSize(\""+id+"\")]").attr("onclick", "changeSize(\""+id+"\")");
             }
         });
     }
 </script>
+
+    <script type="text/javascript">
+        function changeGray(id) {
+            imgURL=$("#"+id).attr("src");
+            $.ajax({
+                type: 'POST',
+                url: '/imggray',
+                data: ({
+                    "imgURL": imgURL
+                }),
+                success: function (url) {
+                    $("#" + id).attr("src", url);
+                }
+            });
+        }
+    </script>
+
+
+    <script type="text/javascript">
+        function changeSepia(id) {
+            imgURL=$("#"+id).attr("src");
+            $.ajax({
+                type: 'POST',
+                url: '/imgsepia',
+                data: ({
+                    "imgURL": imgURL
+                }),
+                success: function (url) {
+                    $("#" + id).attr("src", url);
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        function changeOriginal(id) {
+            $.ajax({
+                type: 'POST',
+                url: '/img',
+                data: ({
+                }),
+                success: function (url) {
+                    $("#" + id).attr("src", url);
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>

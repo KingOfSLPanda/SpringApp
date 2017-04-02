@@ -38,6 +38,7 @@ INSERT INTO user_roles VALUES (1, 2);
 
 CREATE TABLE images (
   id       INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  publicId VARCHAR(255) NOT NULL
+  url VARCHAR(255) NOT NULL,
+  urlOriginal VARCHAR(255) NOT NULL
 )
   ENGINE = InnoDB;

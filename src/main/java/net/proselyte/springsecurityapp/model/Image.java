@@ -18,14 +18,25 @@ public class Image {
         this.id = id;
     }
 
-    public String getPublicId() {
-        return publicId;
+    public String getUrl() {
+        return url;
     }
 
-    public void setPublicId(String publicId) {
-        this.publicId = publicId;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    @Column(name = "publicId")
-    private String publicId;
+    @Column(name = "url")
+    private String url;
+
+    public String getUrlOriginal() {
+        return urlOriginal;
+    }
+
+    public void setUrlOriginal(String urlOriginal) {
+        this.urlOriginal = urlOriginal;
+    }
+
+    @Column(name = "urlOriginal")
+    private String urlOriginal;
 }
