@@ -37,12 +37,24 @@ public class ImageController {
     @RequestMapping(value="/imgsepia", method = RequestMethod.POST)
     public @ResponseBody String imgSepia(@RequestParam String imgURL) throws IOException {
         imgURL = cloudinaryService.changeSepia(imgURL);
-        return "img";
+        return imgURL;
     }
 
     @RequestMapping(value="/img+", method = RequestMethod.POST)
     public @ResponseBody String imgChange(@RequestParam String imgURL, String s) throws IOException {
         imgURL=cloudinaryService.changeSize(imgURL, s);
+        return imgURL;
+    }
+
+    @RequestMapping(value="/getimgwidth", method = RequestMethod.POST)
+    public @ResponseBody Integer getImgWidth(@RequestParam String imgURL) throws IOException {
+        Integer width =cloudinaryService.getWidth(imgURL);
+        return width;
+    }
+
+    @RequestMapping(value="/getoriginal", method = RequestMethod.POST)
+    public @ResponseBody String getImgOriginal(@RequestParam String imgURL) throws IOException {
+        imgURL = cloudinaryService.getOriginal(imgURL);
         return imgURL;
     }
 }

@@ -21,9 +21,9 @@
 
         .holder{
             position:relative;
-            width:auto;
+            width:300px;
             height:auto;
-            /*align-self: center;*/
+            align-self: center;
             margin: auto;
         }
         .block{
@@ -32,19 +32,27 @@
             left:0;
             /*bottom:0;*/
             /*right:0;*/
-            top:92%;
+            top:89%;
             background:rgba(255,255,255, 0.7);
             padding:5px;
             display:none;
         }
+
+        .holder:hover{
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
         .holder:hover .block{
             display:inline-block;
         }
     </style>
+
 </head>
-<body>
-    <div class="holder">
-        <span class="imgURL"><img src="${image.getUrl()}" id="${image.getId()}"/>
+<body id="my-files">
+    <div class="holder" >
+        <span class="imgURL" >
+            <%--<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">--%>
+                <img onmousedown="ball" onmousemove="ball" onmouseup="ball" ondragstart="ball" src="${image.getUrl()}" id="${image.getId()}"/>
         <div class="block">
             <button><span class="glyphicon glyphicon-plus-sign" onclick='changeSize("${image.getId()}", "+")'></span></button>
             <button><span class="glyphicon glyphicon-minus-sign" onclick='changeSize("${image.getId()}", "-")'></span></button>
@@ -54,11 +62,26 @@
     <%--<button><span class="fa-minus-square-o" onclick='changeSize("${image.getUrl()}")'></span></button>--%>
         </div>
         </span>
-
     </div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function getWidth(id) {
+            imgURL=$("#"+id).attr("src");
+            $.ajax({
+                type: 'POST',
+                url: '/getimgwidth',
+                data: ({
+                    "imgURL": imgURL
+                }),
+                success: function (width) {
+                    document.getElementsByClassName('holder').style.width = width + 'px';
+                }
+            });
+        }
+    </script>
 
 <script type="text/javascript">
     function changeSize(id, s) {
@@ -114,16 +137,77 @@
 
     <script type="text/javascript">
         function changeOriginal(id) {
+            imgURL=$("#"+id).attr("src");
             $.ajax({
                 type: 'POST',
-                url: '/img',
+                url: '/getoriginal',
                 data: ({
+                    "imgURL": imgURL
                 }),
                 success: function (url) {
                     $("#" + id).attr("src", url);
                 }
             });
         }
+    </script>
+
+    <script>
+        var ball = document.getElementById("${image.getId()}");
+
+        ball.onmousedown = function(e) { // 1. отследить нажатие
+
+            // подготовить к перемещению
+            // 2. разместить на том же месте, но в абсолютных координатах
+            ball.style.position = 'absolute';
+            moveAt(e);
+            // переместим в body, чтобы мяч был точно не внутри position:relative
+            document.body.appendChild(ball);
+
+//            ball.style.zIndex = 1000; // показывать мяч над другими элементами
+
+            // передвинуть мяч под координаты курсора
+            // и сдвинуть на половину ширины/высоты для центрирования
+            function moveAt(e) {
+                ball.style.left = e.pageX - ball.offsetWidth / 2 + 'px';
+                ball.style.top = e.pageY - ball.offsetHeight / 2 + 'px';
+            }
+
+            // 3, перемещать по экрану
+            document.onmousemove = function (e) {
+                moveAt(e);
+            }
+
+            // 4. отследить окончание переноса
+            ball.onmouseup = function () {
+                document.onmousemove = null;
+                ball.onmouseup = null;
+            }
+
+            ball.ondragstart = function () {
+                return false;
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        var htmlelement = document.getElementById("my-files");
+        htmlelement.addEventListener("dragover", function (event) {
+            /*отменяем действие по умолчанию*/
+            event.preventDefault();
+        }, false);
+
+        htmlelement.addEventListener("drop", function (event) {
+            //отменяем действие по умолчанию
+            event.preventDefault();
+            var files = event.dataTransfer.files;
+            for (var i = 0; i < files.length; i++) {
+                console.log("Имя файла: " + files[i].name);
+                console.log("Тип файла: " + files[i].type);
+                console.log("Размер файла: "+files[i].size)
+            }
+        }, false);
+
     </script>
 
 </body>

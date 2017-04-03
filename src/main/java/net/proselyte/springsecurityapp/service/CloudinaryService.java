@@ -13,4 +13,6 @@ public interface CloudinaryService {
     String changeSize(String url, String s) throws IOException;
     String changeGray(String url) throws IOException;
     String changeSepia(String url) throws IOException;
+    Integer getWidth(String url) throws IOException;
+    String getOriginal(String url) throws IOException;
 }

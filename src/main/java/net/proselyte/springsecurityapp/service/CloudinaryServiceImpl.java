@@ -84,6 +84,21 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         return image.getUrl();
     }
 
+    @Override
+    public Integer getWidth(String url) throws IOException {
+        Map uploadResult = cloudinary.uploader().upload(url, ObjectUtils.emptyMap());
+        Integer width=(Integer) uploadResult.get("width");
+        return width;
+    }
+
+    @Override
+    public String getOriginal(String url) throws IOException {
+        Image image=imageDao.findByUrl(url).get(0);
+        image.setUrl(image.getUrlOriginal());
+        imageDao.save(image);
+        return image.getUrl();
+    }
+
     @Bean
     public Cloudinary createCloud(){
         return new Cloudinary(ObjectUtils.asMap(
